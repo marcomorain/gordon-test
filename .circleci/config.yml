@@ -12,15 +12,6 @@ jobs:
           command: pip install -r requirements.txt
           name: Install dependencies
 
-#      - run: apt-get update
-#      - run: apt-get install java
-#
-#      - run: wget -O /tmp/selenium-server-standalone-2.45.0.jar "http://selenium-release.storage.googleapis.com/2.45/selenium-server-standalone-2.45.0.jar"
-#
-#      - run:
-#          command: java -jar /tmp/selenium-server-standalone-2.45.0.jar
-#          background: true
-
       - run:
           command: setsid python -m SimpleHTTPServer 8080
           pwd: /gordon-test/server-root
@@ -55,9 +46,13 @@ workflows:
   build-n-deploy:
     jobs:
       - build
+      - test:
+          requires:
+            - build
       - deploy:
           filters:
             branches:
               only: /m.ster/
           requires:
             - build
+            - test
