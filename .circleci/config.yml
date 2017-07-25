@@ -6,6 +6,7 @@ jobs:
     working_directory: /gordon-test
     steps:
       - checkout
+      - setup_remote_docker
 
       - run:
           command: pip install -r requirements.txt
@@ -35,6 +36,10 @@ jobs:
       - store_artifacts:
           path: /tmp/my_artifacts
           destination: text-data
+  test:
+    machine: true
+    steps:
+      - run: date
 
   deploy:
     docker:
@@ -42,16 +47,8 @@ jobs:
     working_directory: /gordon-test
     steps:
       - run:
-          command: echo "deploying! (not really) "
+          command: echo "deploying!"
           pwd: /
-
-      - run: echo "Upstream artifacts in ${CIRCLE_UPSTREAM_ARTIFACTS}"
-
-      - run: find ${CIRCLE_UPSTREAM_ARTIFACTS}
-
-      - run: cat ${CIRCLE_UPSTREAM_ARTIFACTS}/build/0/text-data/first
-
-      - run: cat ${CIRCLE_UPSTREAM_ARTIFACTS}/build/0/text-data/second
 
 workflows:
   version: 2
